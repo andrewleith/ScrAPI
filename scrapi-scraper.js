@@ -1,7 +1,7 @@
 var nodeio = require('node.io');
 var util = require('util');
 
-exports.scrape = function (scrapeOptions, callback) {
+exports.scrape = function (scrapeOptions, outputMappings, callback) {
   var job = new nodeio.Job({
     input: [ scrapeOptions ],
     run: function (input) {
@@ -31,13 +31,13 @@ exports.scrape = function (scrapeOptions, callback) {
           var lastId;
 
           var colNumber = 0;
-          for (var col in scrapeOptions.outputMappings)
+          for (var col in outputMappings)
           { 
-            console.log('scraping: ' + scrapeOptions.outputMappings[col].selector);
+            console.log('scraping: ' + outputMappings[col].selector);
             
             // if the column cant be scraped, continue anyway
             try {
-              var data = $(scrapeOptions.outputMappings[col].selector,listing)[scrapeOptions.outputMappings[col].accessor]; //["attribs.href"]; 
+              var data = $(outputMappings[col].selector,listing)[outputMappings[col].accessor]; //["attribs.href"]; 
 
               // remember the id so we can use it as the key
               if (colNumber === 0) { 
