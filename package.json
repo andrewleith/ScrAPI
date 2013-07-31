@@ -1,15 +1,32 @@
-{ "name"         : "valid"
-, "description"  : "Library to quickly validate JSON."
-, "version"      : "0.1.0"
-, "keywords"     : [ "validation", "schema", "test", "json" ]
-, "author"       : { "name" : "Orange Cloud Networks", "email" : "info@orangecloud.ca", "url" : "http://www.orangecloud.ca" }
-, "contributors" : [ ]
-, "licenses"     : [ ]
-, "homepage"     : "http://www.orangecloud.ca"
-, "repository"   : "" 
-, "bugs"         : ""
-, "directories"  : { "lib" : "./lib" }
-, "main"         : "./lib"
-, "scripts"      : ""
-, "dependencies" : { "node.io": "0.5.1", "express": "3.0" } 
+{
+  "name": "valid",
+  "description": "Library to quickly validate JSON.",
+  "version": "0.1.0",
+  "keywords": [
+    "validation",
+    "schema",
+    "test",
+    "json"
+  ],
+  "author": {
+    "name": "Orange Cloud Networks",
+    "email": "info@orangecloud.ca",
+    "url": "http://www.orangecloud.ca"
+  },
+  "contributors": [],
+  "licenses": [],
+  "homepage": "http://www.orangecloud.ca",
+  "repository": "",
+  "bugs": "",
+  "directories": {
+    "lib": "./lib"
+  },
+  "main": "./lib",
+  "scripts": "",
+  "dependencies": {
+    "node.io": "0.5.1",
+    "express": "3.0",
+    "commander": "~2.0.0",
+    "cheerio": "~0.12.0"
+  }
 }

@@ -13,9 +13,9 @@ To get the data from your target website, you'll specify selectors (using node.i
 You'll also map these data to fields that will be output by your method in JSON.
 
 
-## An example
+## An example configuration
 
-For example, say you wanted to display job postings from a URL, `http://jobs/alljobs`. You might want a method named 
+For example, say you wanted to display job postings from a URL, `http://jobs/alljobs`. You might want to create a collection URI named named 
 `listings`. You'd start by defining your method and indicating the URL to scrape from:
 
 ```JSON
@@ -23,7 +23,7 @@ Config = {
   methods: {
     'listings': {
       verb: 'GET',
-      targetNoParams: {
+      target: {
         url: 'http://jobs/alljobs',
         verb: 'GET',
         ...
@@ -42,7 +42,7 @@ Config = {
   methods: {
     'listings': {
       verb: 'GET',
-      targetNoParams: {
+      target: {
         url: 'http://jobs/alljobs',
         verb: 'GET',
         rowSelector: '.row-data',
@@ -62,30 +62,18 @@ Config = {
 };
 ```
       
-If you don't need to pass any sort of parameters, you're good to go. Run node scrapi [your configuration file].
+If you don't need to pass any sort of parameters, you're good to go. Run scrapijs [our configuration file].
 
 ## Example with parameters
 
-Building from the previous configuration, here's an example that makes the listings method do a search if 
-parameters are provided. You'll need to define the parameters, and then map them to the site you're scraping from.  
-Let's say our job site has a search function we can access using  `http://jobs/jobsearch?title=x`.  We will want to 
-map an input of our method, named `JobTitle` (for consistency's sake), to the query parameter on the jobs site, `title`:
+Here's an example that makes the listings URI able to do a search if parameters are provided. You'll need to define the parameters, and then map them to the site you're scraping from.  Let's say our job site has a search function we can access using  `http://jobs/jobsearch?title=x`.  We will want to map an input of our method, named `JobTitle` (for consistency's sake), to the query parameter on the jobs site, `title`:
 
 ```JSON
 Config = {
   methods: {
     'listings': {
       verb: 'GET',
-      targetNoParams: {
-        url: 'http://jobs/alljobs',
-        verb: 'GET',
-        rowSelector: '.row-data',
-        outputMappings: {  
-          'JobID': '.column-data h1 a',
-          'JobTitle': '.column-data h2.text'
-        }
-      },
-      targetWithParams: {
+      target: {
         url: 'http://jobs/jobsearch?',
         verb: 'GET',
         rowSelector: '.row-data',

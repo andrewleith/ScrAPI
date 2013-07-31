@@ -1,0 +1,25 @@
+{ 
+    "methods": {
+        "listings": {
+            "verb": "GET",
+            "outputMappings": {  
+                    "title": {
+                        "selector": "h1 a",
+                        "accessor": "text()",
+                        "doc_description": "Title of news story"
+                    },
+                    "category": {
+                        "selector": "h5",
+                        "accessor": "text()",
+                        "doc_description": "Category of news story"
+                    }
+                },
+            "doc_synopsis": "Gets a list of all current house listings based on any of the following optional parameters. They keywords search is a contains type searches and not exact matches.",
+            "target": {
+                "url": "http://www.wired.com",
+                "verb": "GET",
+                "rowSelector": ".headline1, .headline2"
+            }
+        }
+    }
+}

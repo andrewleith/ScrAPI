@@ -1,5 +1,6 @@
 var nodeio = require('node.io');
 var util = require('util');
+var cheerio = require('cheerio');
 
 exports.scrape = function (scrapeOptions, outputMappings, callback) {
   var job = new nodeio.Job({
@@ -10,7 +11,9 @@ exports.scrape = function (scrapeOptions, outputMappings, callback) {
       var url = scrapeOptions.url;
       console.log('url: ' + scrapeOptions.url);       
 
-      this.getHtml(url, function(err, $) {
+      this.get(url, function(err, data) {
+        
+        $ = cheerio.load(data);
         //Handle any request / parsing errors
         if (err) { 
           console.log("Unable to parse site:");
@@ -18,53 +21,34 @@ exports.scrape = function (scrapeOptions, outputMappings, callback) {
         }
 
         // get all the listings on the page
-        var rows = {};
+        var rows = [];
 
         console.log('selector: ' + scrapeOptions.rowSelector);
-        var results = $(scrapeOptions.rowSelector);
-
-        // storing this as a function to work around node.io's decision not to return
-        // selectors that match only 1 item as an array of 1 item (which makes .each() not 
-        // work when only item is returned)
-        var scraper = function(listing) {
+        $(scrapeOptions.rowSelector).each(function(i, elem) {
           var row = {};
           var lastId;
 
-          var colNumber = 0;
           for (var col in outputMappings)
           { 
             console.log('scraping: ' + outputMappings[col].selector);
             
             // if the column cant be scraped, continue anyway
-            try {
-              var data = $(outputMappings[col].selector,listing)[outputMappings[col].accessor]; //["attribs.href"]; 
+            //try {
+              var data = $(this).find(outputMappings[col].selector).text();//[outputMappings[col].accessor]; //["attribs.href"]; 
+              console.log("d: " + data);
+              row[col] = data;
 
-              // remember the id so we can use it as the key
-              if (colNumber === 0) { 
-                lastId = data;
-              }
-              // store all other columns as properties
-              else {
-                row[col] =  data;
-              } 
+              
+            //}
+            //catch (e)
+            //{
 
-              rows[lastId] = row;
-            }
-            catch (e)
-            {
-
-            }
-            colNumber++;
+            //}
           }
-        };
+          rows.push(row);
+        });
 
-        if (results.length === undefined) {
-          scraper(results);
-        }
-        else {
-          results.each(scraper);
-        }
-        
+    
 
         this.emit(rows);
       });

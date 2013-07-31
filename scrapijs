@@ -1,0 +1,55 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+ var program = require('commander');
+ console.log('-------------------------------------------');
+ console.log('  ScrAPI - expose a website as a REST API');
+ console.log('-------------------------------------------');
+ program
+ .version('0.0.1')
+ .usage('[options] <config file>')
+ .option('-d, --document', 'Generate documentation of API')
+ .parse(process.argv);
+
+// if no config, exit
+if (program.args[0] === undefined) {
+  program.help();
+}
+
+// load templates for code generation
+var templateDir = './templates';
+// default file to save to
+var outputFile = "app.js";
+
+fs = require('fs')
+
+// API method template
+var APIMethod = fs.readFileSync(templateDir + '/APIMethod.js').toString();
+// includes template
+var includes = fs.readFileSync(templateDir + '/includes.js').toString();
+// server start template
+var serverstart = fs.readFileSync(templateDir + '/serverstart.js').toString();
+
+// load config
+var Config = JSON.parse(fs.readFileSync(program.args[0]).toString());
+
+console.log('Creating app.js...');
+var app = "";
+for (var method in Config.methods) {
+
+  app = includes + APIMethod
+  .replace("%%URI%%", method)
+  .replace("%%OPTIONS%%", JSON.stringify(Config.methods[method])) + serverstart;
+}
+
+// if (fs.existsSync(outputFile)) {
+  // program.prompt('File exists, overwrite? [y/N]: ', function(choice){
+  //     if (choice.toLowerCase() === 'y') {
+        fs.writeFile(outputFile, app);
+  //     }
+  // });
+// }
+
