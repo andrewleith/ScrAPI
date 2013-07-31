@@ -1,20 +1,17 @@
 # ScrAPI
-ScrAPI (pronounced scray pee eye, like API) - expose data from any website as a RESTful(?) API 
+ScrAPI (pronounced scray pee eye, like API) allows you to expose data from any website as an API.
+
 
 ## What it does
-ScrAPI creates your API using express, and scrapes the data from your target website using node.io.  
-After setting up your API and running ScrAPI, you will be running your API hosted in nodejs.  It also generates full API
-documentation in markdown.
+Under the hood, ScrAPI creates your API using express.  It will generate the API code for you and you can use it as is, or add more functionality to it by editing the code. To scrape the data it uses node.io. By adding a few documentation objects to your configuration, it can also generate full API documentation in markdown.
+
 
 ## How it works
+ScrAPI gets you to define collection and element URIs which make up your API. You can add query parameters to do things like filtering or searching. For each resource of your API, you define how it scrapes your target site.
 
-ScrAPI allows you to define "methods" which make up your API.  If you need parameters, you can add them too.  Each 
-method can be defined in terms of what it does when passed no parameters or what it does when passed some parameters. 
-You will map the parameters passed in to your method to parameters of your target website - the actual website you are 
-scraping from.  
-
-To get the data from your target website, you'll specify selectors (using node.io) to scrape out the exact data you need.  
+To get the data from your target website, you'll specify selectors (using node.io's conventions) to scrape out the exact data you need.  
 You'll also map these data to fields that will be output by your method in JSON.
+
 
 ## An example
 
