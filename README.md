@@ -7,10 +7,9 @@ Under the hood, ScrAPI creates your API using express.  It will generate the API
 
 
 ## How it works
-ScrAPI gets you to define collection and element URIs which make up your API. You can add query parameters to do things like filtering or searching. For each resource of your API, you define how it scrapes your target site.
+ScrAPI gets you to define URIs which make up your API. You can add query parameters to do things like filtering or searching.For each resource of your API, you define how it scrapes your target site.
 
-To get the data from your target website, you'll specify selectors (using node.io's conventions) to scrape out the exact data you need.  
-You'll also map these data to fields that will be output by your method in JSON.
+To get the data from your target website, you'll specify selectors (using node.io's conventions) to scrape out the exact data you need. You'll also map these data to fields that will be output by your method in JSON.
 
 
 ## An example configuration
@@ -42,26 +41,26 @@ Config = {
   methods: {
     'listings': {
       verb: 'GET',
-      target: {
-        url: 'http://jobs/alljobs',
-        verb: 'GET',
-        rowSelector: '.row-data',
-        outputMappings: {  
-          'JobId': {
-             selector: '.col-data h1 a',
-             accessor: 'text'
-           },
-           'JobTitle': {
-             selector: '.col-data h2',
-             accessor: 'text'
-           }
-        }
-      }
+      outputMappings: {  
+        'JobId': {
+         selector: '.col-data h1 a',
+         accessor: 'text()'
+       },
+       'JobTitle': {
+         selector: '.col-data h2',
+         accessor: 'text()'
+       }
+     }
+     target: {
+      url: 'http://jobs/alljobs',
+      verb: 'GET',
+      rowSelector: '.row-data'
     }
   }
+}
 };
 ```
-      
+
 If you don't need to pass any sort of parameters, you're good to go. Run scrapijs [our configuration file].
 
 ## Example with parameters
@@ -73,14 +72,19 @@ Config = {
   methods: {
     'listings': {
       verb: 'GET',
-      target: {
+      outputMappings: {  
+        'JobId': {
+         selector: '.col-data h1 a',
+         accessor: 'text()'
+       },
+       'JobTitle': {
+         selector: '.col-data h2',
+         accessor: 'text()'
+       }
+       target: {
         url: 'http://jobs/jobsearch?',
         verb: 'GET',
         rowSelector: '.row-data',
-        outputMappings: {  
-          'JobID': '.column-data h1 a',
-          'JobTitle': '.column-data h2.text'
-        }
         inputMappings: {
           'JobTitle': 'title'
         }
@@ -89,3 +93,4 @@ Config = {
   }
 };
 ```
+
