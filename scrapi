@@ -1,20 +1,17 @@
 #!/usr/bin/env node
 
-/**
- * Module dependencies.
- */
+// commander stuff
+var program = require('commander');
+console.log('-------------------------------------------');
+console.log('  ScrAPI - expose a website as a REST API');
+console.log('-------------------------------------------');
+program
+.version('0.0.1')
+.usage('[options] <config file>')
+.option('-d, --document', 'Generate documentation of API')
+.parse(process.argv);
 
- var program = require('commander');
- console.log('-------------------------------------------');
- console.log('  ScrAPI - expose a website as a REST API');
- console.log('-------------------------------------------');
- program
- .version('0.0.1')
- .usage('[options] <config file>')
- .option('-d, --document', 'Generate documentation of API')
- .parse(process.argv);
-
-// if no config, exit
+// if no config file, exit
 if (program.args[0] === undefined) {
   program.help();
 }
@@ -35,6 +32,7 @@ var serverstart = fs.readFileSync(templateDir + '/serverstart.js').toString();
 
 // load config
 var Config = JSON.parse(fs.readFileSync(program.args[0]).toString());
+// TODO: validate Config 
 
 console.log('Creating app.js...');
 var app = "";
@@ -42,13 +40,13 @@ for (var method in Config.methods) {
 
   app = includes + APIMethod
   .replace("%%URI%%", method)
-  .replace("%%OPTIONS%%", JSON.stringify(Config.methods[method])) + serverstart;
+  .replace("%%OPTIONS%%", JSON.stringify(Config.methods[method])) + serverstart.replace("%%PORT%%", Config.port);
 }
 
 // if (fs.existsSync(outputFile)) {
   // program.prompt('File exists, overwrite? [y/N]: ', function(choice){
   //     if (choice.toLowerCase() === 'y') {
-        fs.writeFile(outputFile, app);
+    fs.writeFile(outputFile, app);
   //     }
   // });
 // }

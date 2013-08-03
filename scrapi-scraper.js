@@ -12,7 +12,7 @@ exports.scrape = function (scrapeOptions, outputMappings, callback) {
       console.log('url: ' + scrapeOptions.url);       
 
       this.get(url, function(err, data) {
-        
+
         $ = cheerio.load(data);
         //Handle any request / parsing errors
         if (err) { 
@@ -31,12 +31,23 @@ exports.scrape = function (scrapeOptions, outputMappings, callback) {
           for (var col in outputMappings)
           { 
             console.log('scraping: ' + outputMappings[col].selector);
+            console.log('accessor: ' + outputMappings[col].accessor);
+
+            var data;
+            // if the accessor is an array, run the first argument as a function and the rest as params
+            if (outputMappings[col].accessor instanceof Array) {
+              console.log('accessor is array: ' + outputMappings[col].accessor);
+              obj = $(this).find(outputMappings[col].selector);
+              data = obj[outputMappings[col].accessor[0]].apply(obj, outputMappings[col].accessor[1]); //["attribs.href"]; 
+            }
+            else {
+              data = $(this).find(outputMappings[col].selector)[outputMappings[col].accessor](); //["attribs.href"]; 
+            }
+            var fuck="text";
             
-            // if the column cant be scraped, continue anyway
-            //try {
-              var data = $(this).find(outputMappings[col].selector).text();//[outputMappings[col].accessor]; //["attribs.href"]; 
-              console.log("d: " + data);
-              row[col] = data;
+
+            console.log("d: " + data);
+            row[col] = data;
 
               
             //}
@@ -48,12 +59,12 @@ exports.scrape = function (scrapeOptions, outputMappings, callback) {
           rows.push(row);
         });
 
-    
+
 
         this.emit(rows);
       });
-}
-});
+    }
+  });
 nodeio.start(job, { silent: true }, callback, true);
 };
 
