@@ -44,11 +44,11 @@ Config = {
       outputMappings: {  
         'JobId': {
          selector: '.col-data h1 a',
-         accessor: 'text()'
+         accessor: 'text'
        },
        'JobTitle': {
          selector: '.col-data h2',
-         accessor: 'text()'
+         accessor: 'text'
        }
      }
      target: {
@@ -75,11 +75,11 @@ Config = {
       outputMappings: {  
         'JobId': {
          selector: '.col-data h1 a',
-         accessor: 'text()'
+         accessor: 'text'
        },
        'JobTitle': {
          selector: '.col-data h2',
-         accessor: 'text()'
+         accessor: 'text'
        }
        target: {
         url: 'http://jobs/jobsearch?',
