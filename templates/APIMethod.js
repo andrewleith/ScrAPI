@@ -1,4 +1,5 @@
 
+/// %%SYNOPSIS%%
 app.get('/%%URI%%', function(req, res) {
 
     var options = %%OPTIONS%%;

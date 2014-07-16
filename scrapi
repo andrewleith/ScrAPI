@@ -2,6 +2,8 @@
 
 // commander stuff
 var program = require('commander');
+var util = require('util');
+
 console.log('-------------------------------------------');
 console.log('  ScrAPI - expose a website as a REST API');
 console.log('-------------------------------------------');
@@ -35,13 +37,21 @@ var Config = JSON.parse(fs.readFileSync(program.args[0]).toString());
 // TODO: validate Config 
 
 console.log('Creating app.js...');
-var app = "";
-for (var method in Config.methods) {
 
-  app = includes + APIMethod
-  .replace("%%URI%%", method)
-  .replace("%%OPTIONS%%", JSON.stringify(Config.methods[method])) + serverstart.replace("%%PORT%%", Config.port);
+// app is divided into three sections
+// Section 1: header - the include libraries
+var app = includes;
+
+// Section 2: each method defined in the config
+for (var method in Config.methods) {
+	console.log(util.inspect(method));
+  app += APIMethod.replace('%%URI%%', method)
+  				  .replace('%%OPTIONS%%', JSON.stringify(Config.methods[method]))
+  				  .replace('%%SYNOPSIS%%', Config.methods[method].doc_synopsis);
 }
+
+// Section 3: some code to start the express webserver
+app += serverstart.replace("%%PORT%%", Config.port)
 
 // if (fs.existsSync(outputFile)) {
   // program.prompt('File exists, overwrite? [y/N]: ', function(choice){
