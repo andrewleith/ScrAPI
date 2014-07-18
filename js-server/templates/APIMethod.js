@@ -11,9 +11,10 @@ app.get('/%%URI%%', function(req, res) {
         }            
     }
     
-    scraper.scrape(options.target, options.outputMappings, function(err, output) {
-        res.json(output);
-    }, true);    
+    get(options.target.url, function(data) {
 
+        var scrapedData = scrape($, data, options.target.rowSelector, options.outputMappings);
+        res.json(scrapedData);
+    });
 });
 

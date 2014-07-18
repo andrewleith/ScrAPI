@@ -61,7 +61,7 @@ Config = {
 };
 ```
 
-If you don't need to pass any sort of parameters, you're good to go. Run scrapijs [our configuration file].
+If you don't need to pass any sort of parameters, you're good to go. Run scrapijs [your configuration file].
 
 ## Example with parameters
 

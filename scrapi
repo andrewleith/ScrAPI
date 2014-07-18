@@ -19,45 +19,46 @@ if (program.args[0] === undefined) {
 }
 
 // load templates for code generation
-var templateDir = './templates';
+var serverTemplateDir = './js-server/templates';
+var clientTemplateDir = './js-client/templates';
 // default file to save to
-var outputFile = "app.js";
+var serverOutputFile = "app.js";
+var clientOutputFile = "app-client.js";
 
 fs = require('fs')
 
-// API method template
-var APIMethod = fs.readFileSync(templateDir + '/APIMethod.js').toString();
-// includes template
-var includes = fs.readFileSync(templateDir + '/includes.js').toString();
-// server start template
-var serverstart = fs.readFileSync(templateDir + '/serverstart.js').toString();
+// load server templates
+var serverAPIMethod = fs.readFileSync(serverTemplateDir + '/APIMethod.js').toString();
+var includes = fs.readFileSync(serverTemplateDir + '/includes.js').toString();
+var serverstart = fs.readFileSync(serverTemplateDir + '/serverstart.js').toString();
+// load client templates
+var clientAPIMethod = fs.readFileSync(clientTemplateDir + '/APIMethod.js').toString();
 
 // load config
 var Config = JSON.parse(fs.readFileSync(program.args[0]).toString());
 // TODO: validate Config 
 
-console.log('Creating app.js...');
+console.log('Creating ' + serverOutputFile + '...');
 
-// app is divided into three sections
+// server app is divided into three sections, client app is one
 // Section 1: header - the include libraries
-var app = includes;
+var serverApp = includes;
+var clientApp = '';
 
 // Section 2: each method defined in the config
 for (var method in Config.methods) {
 	console.log(util.inspect(method));
-  app += APIMethod.replace('%%URI%%', method)
+  serverApp += serverAPIMethod.replace('%%URI%%', method)
   				  .replace('%%OPTIONS%%', JSON.stringify(Config.methods[method]))
   				  .replace('%%SYNOPSIS%%', Config.methods[method].doc_synopsis);
+  clientApp += clientAPIMethod.replace('%%URI%%', method)
+            .replace('%%OPTIONS%%', JSON.stringify(Config.methods[method]))
+            .replace('%%SYNOPSIS%%', Config.methods[method].doc_synopsis);
 }
 
 // Section 3: some code to start the express webserver
-app += serverstart.replace("%%PORT%%", Config.port)
+serverApp += serverstart.replace("%%PORT%%", Config.port)
 
-// if (fs.existsSync(outputFile)) {
-  // program.prompt('File exists, overwrite? [y/N]: ', function(choice){
-  //     if (choice.toLowerCase() === 'y') {
-    fs.writeFile(outputFile, app);
-  //     }
-  // });
-// }
-
+// save apps
+fs.writeFile(serverOutputFile, serverApp);
+fs.writeFile(clientOutputFile, clientApp);
